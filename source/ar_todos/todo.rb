@@ -11,18 +11,21 @@ class ToDo
   def self.print_list(list_name, tasks)
     puts "\n\n#{list_name}:\n"
     puts "-" * (list_name.length+1)
-    tasks.each { |task| puts "[ ] #{tasks.index(task)+1}: #{task.description}" }
+    tasks.each { |task| puts "#{self.completed_mark(task)} #{tasks.index(task)+1}: #{task.description}" }
   end
 
   def self.print_added_task(task_description, list_name)
     puts "\nAdded task to #{list_name}:"
     puts "#{task_description}"
+    revised_tasks = ToDoController.get_ordered_tasks(list_name)
+    self.print_list(list_name, revised_tasks)
   end
 
   def self.prompt_which_list
     puts "\nWhich list would you like to add this task to?"
     self.print_list_options
     chosen_list = gets.chomp
+    list_hash = ToDoController.list_options
     list_hash[chosen_list]
   end
 
@@ -34,6 +37,10 @@ class ToDo
   def self.print_altered_task(task_description, list_name, revised_tasks, action)
     puts "\nTask #{action}:\n#{task_description}"
     self.print_list(list_name, revised_tasks)
+  end
+
+  def self.completed_mark(task)
+    task.completed ? '[X]' : '[ ]'
   end
 end
 
@@ -80,7 +87,8 @@ class ToDoController
 
   def self.complete(argument_string)
     task = self.get_task_from_list(argument_string)
-    task.complete!
+    task.completed = true
+    task.save
     self.alter_list(task, "completed")
   end
 
@@ -108,7 +116,7 @@ class ToDoController
   end
 
   def self.valid_command?(command)
-    command == "list" || command == "add" || command == "delete"
+    command == "list" || command == "add" || command == "delete" || command == "complete"
   end
 
   def self.get_ordered_tasks(list_name)
