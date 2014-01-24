@@ -1,3 +1,7 @@
 require_relative 'config/application'
+require_relative 'app/models/list'
+require_relative 'app/models/task'
 
-puts "Put your application code in #{File.expand_path(__FILE__)}"
+command = ARGV.shift
+message = ARGV.join(" ")
+message == "" ? List.send(command) : List.send(command, message)
