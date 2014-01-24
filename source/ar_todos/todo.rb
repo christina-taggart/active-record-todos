@@ -31,8 +31,8 @@ class ToDo
     list_hash.keys.each { |list_name| puts "- #{list_name}" }
   end
 
-  def self.print_deleted_task(task_description, list_name, revised_tasks)
-    puts "\nTask deleted:\n#{task_description}"
+  def self.print_altered_task(task_description, list_name, revised_tasks, action)
+    puts "\nTask #{action}:\n#{task_description}"
     self.print_list(list_name, revised_tasks)
   end
 end
@@ -73,17 +73,31 @@ class ToDoController
   end
 
   def self.delete(argument_string)
-    list_name = self.extract_list_name(argument_string)
-    task_num = self.extract_task_num(argument_string)
-    tasks = self.get_ordered_tasks(list_name)
-    task = Task.find(tasks[task_num-1].id)
+    task = self.get_task_from_list(argument_string)
     task.destroy
-    revised_tasks = self.get_ordered_tasks(list_name)
-    ToDo.print_deleted_task(task.description, list_name, revised_tasks)
+    self.alter_list(task, "deleted")
+  end
 
+  def self.complete(argument_string)
+    task = self.get_task_from_list(argument_string)
+    task.complete!
+    self.alter_list(task, "completed")
   end
 
   private
+
+  def self.alter_list(task, action)
+    list_name = List.find(task.list_id).name
+    revised_tasks = self.get_ordered_tasks(list_name)
+    ToDo.print_altered_task(task.description, list_name, revised_tasks, action)
+  end
+
+  def self.get_task_from_list(argument_string)
+    list_name = self.extract_list_name(argument_string)
+    task_num = self.extract_task_num(argument_string)
+    tasks = self.get_ordered_tasks(list_name)
+    Task.find(tasks[task_num-1].id)
+  end
 
   def self.extract_list_name(argument_string)
     argument_string[/\A.+[^\d+\z]/].strip

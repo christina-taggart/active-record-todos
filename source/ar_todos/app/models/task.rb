@@ -7,8 +7,9 @@ class Task < ActiveRecord::Base
     self.completed = false
   end
 
-  def complete
+  def complete!
     self.completed = true
+    self.save
   end
 
   def completed?
