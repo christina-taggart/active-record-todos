@@ -1,7 +1,7 @@
 require 'csv'
 
 List.create(name: "stuff")
-Task.create(description: "eat chips", list_id: 1)
+Task.create(description: "eat chips", list_id: 1, is_completed: 0)
 
 tasks_array = []
 CSV.foreach(File.dirname(__FILE__) + "/../db/data/todo_out.csv") do |row|
