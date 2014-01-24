@@ -2,6 +2,7 @@ require 'rake'
 require 'rspec/core/rake_task'
 
 require_relative 'config/application'
+require_relative 'db/seeds'
 
 desc "create the database"
 task "db:create" do
@@ -13,6 +14,7 @@ desc "drop the database"
 task "db:drop" do
   puts "Deleting #{DB_PATH}..."
   rm_f DB_PATH
+  # rm_f 'db/ar-todo.sqlite3'
 end
 
 desc "create migration files in db/migrate"
@@ -45,7 +47,8 @@ end
 
 desc "populate the test database with sample data"
 task "db:seed" do
-  require APP_ROOT.join('db', 'seeds.rb')
+  Importer.create_task
+  Importer.create_list_name
 end
 
 desc 'Retrieves the current schema version number'
