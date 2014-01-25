@@ -3,7 +3,7 @@ require_relative '../../config/application'
 class List < ActiveRecord::Base
   has_many :tasks
 
-  def self.get_list(id) # retrieves an array of task descriptions for a given list
+  def self.get_tasks_for_list(id) # retrieves an array of task descriptions for a given list
     List.tasks_on_this_list(id).map(&:description)
   end
 
@@ -23,6 +23,20 @@ class List < ActiveRecord::Base
   def self.complete_task(list_id, task_position) # marks a specified task on a specified list as complete (i.e. "1")
   	tasks = List.tasks_on_this_list(list_id)
   	tasks[task_position-1].update_attribute(:done, "1")
+  end
+
+  # stuff for controller/view, not model
+
+  def self.list(id) # displays tasks for a given list in desired format
+    tasks = List.get_tasks_for_list(id)
+    tasks.each_with_index do |task, index| 
+      puts "#{index+1}. #{task.capitalize}"
+    end
+  end
+
+  def self.delete(list_id, task_position) # deletes a given task from the list and displays desired message to user
+    deleted_item = List.delete_task(list_id, task_position)
+    puts "You just deleted '#{deleted_item[:description]}'' from your list."
   end
 
 end
