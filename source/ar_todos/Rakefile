@@ -24,6 +24,26 @@ task "db:migrate" do
   end
 end
 
+desc "create an ActiveRecord migration in ./db/migrate"
+task "db:create_migration" do
+  name = ENV['NAME']
+  abort("no NAME specified. use `rake db:create_migration NAME=create_task`") if !name
+
+  migrations_dir = File.join("db", "migrate")
+  version = ENV["VERSION"] || Time.now.utc.strftime("%Y%m%d%H%M%S")
+  filename = "#{version}_#{name}.rb"
+  migration_name = name.gsub(/_(.)/) { $1.upcase }.gsub(/^(.)/) { $1.upcase }
+
+  FileUtils.mkdir_p(migrations_dir)
+
+  open(File.join(migrations_dir, filename), 'w') do |f|
+    f << "class #{migration_name} < ActiveRecord::Migration\n"
+    f << "  def change\n"
+    f << "  end\n"
+    f << "end\n"
+  end
+end
+
 desc "populate the test database with sample data"
 task "db:seed" do
   require APP_ROOT.join('db', 'seeds.rb')
