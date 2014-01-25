@@ -6,7 +6,7 @@ class View
 
   def self.print_list
     Task.all.each do |task|
-      Task.where(done: false) ? box = "[ ]" : box = "[X]"
+      task.done == false ? box = "[ ]" : box = "[X]"
       puts "#{box} #{task.task_text.capitalize}"
     end
   end
@@ -20,11 +20,11 @@ class View
   end
 
   def self.deleted_task
-    puts "Deleted: '#{Task.find(ARGV[1])}!'"
+    puts "Deleted: '#{ARGV[1]}!'"
   end
 
   def self.invalid_entry
-    puts "Seriously!?! There's only 4 commands..."
+    puts "Seriously!?! There's only four commands..."
   end
 
 end
@@ -43,8 +43,7 @@ class Controller
       View.print_list
     when "add"
       #will have to add list_id for more lists
-      p ARGV[1]
-      p Task.create!(task_text: ARGV[1], list_id: 1)
+      Task.create!(task_text: ARGV[1], list_id: 1)
       View.added_task
     when "delete"
       Task.destroy(ARGV[1])
