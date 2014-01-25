@@ -26,5 +26,26 @@
   # 3. Create 2 models, one for List, one for Task
   # 4. These models should require config/application.rb so they have AR & connection to the DB
   # 5. Create fake records and use them to seed the DB. Use Faker gem in seeds.rb & then rake
+  # 6. Implement commands for List & Task classes
+  #    list, add, delete, complete
 
+  # ruby todo.rb list 1
+  # should display all tasks for list id #1
 
+  # ruby todo.rb list 2
+  # should display all tasks for list id #2
+
+  # Assume user means list id 1 if no id is supplied
+
+  # Algorithm to Delete a Task from The List
+  # left side is num user sees, right side is id in DB
+  #  List
+  # 1 id 1
+  # 2 id 2
+  # 3 id 3
+  # 4 id 4
+  # We store the list values in an array:
+  # [id1, id2, id3, id4]
+  # select element at list_idx-1
+  # pull out element.id at position list_idx-1
+  # destroy element.id
