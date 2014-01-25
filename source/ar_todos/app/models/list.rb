@@ -7,7 +7,7 @@ class List < ActiveRecord::Base
     List.tasks_on_this_list(id).map(&:description)
   end
 
-  def self.add(list_id, task_description) # adds a task to a specified list
+  def self.add_task(list_id, task_description) # adds a task to a specified list
   	Task.create(description: task_description, done: "0", list_id: list_id)
   end
 
@@ -25,18 +25,14 @@ class List < ActiveRecord::Base
   	tasks[task_position.to_i-1].update_attribute(:done, "1")
   end
 
-  # stuff for controller/view, not model
+  # list only
 
-  def self.list(id) # displays tasks for a given list in desired format
-    tasks = List.get_tasks_for_list(id)
-    tasks.each_with_index do |task, index| 
-      puts "#{index+1}. #{task.capitalize}"
-    end
+  def self.add_list(name)
+    List.create(name: name)
   end
 
-  def self.delete(list_id, task_position) # deletes a given task from the list and displays desired message to user
-    deleted_item = List.delete_task(list_id, task_position.to_i)
-    puts "You just deleted '#{deleted_item[:description]}'' from your list."
+  def self.retrieve_list_names
+    List.all.to_a.map(&:name)
   end
 
 end
