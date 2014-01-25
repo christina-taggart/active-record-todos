@@ -7,16 +7,14 @@ module Importer
   extend self
 
   def create_list_name
-    30.times do
-      name = Faker::Company.name
-      List.create(name: name)
-    end
+    name = Faker::Company.name
+    List.create(name: name)
   end
 
   def create_task
-    100.times do
+    10.times do
       task_text = Faker::Company.bs
-      Task.create(task_text: task_text, done: 0, list_id: rand(1..30))
+      Task.create(task_text: task_text, list_id: 1)
     end
   end
 
