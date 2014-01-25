@@ -56,12 +56,13 @@ class ToDoController
   end
 
   def self.list(list_name)
+    raise "Please specify a list, or 'all'" if list_name.nil?
     if list_name.downcase == 'all'
       puts "\nChoose from the following lists:\n"
       ToDo.print_list_options
     else
       tasks = self.get_ordered_tasks(list_name)
-      if tasks.empty?
+      unless self.list_exists?(list_name)
         raise "That list does not exist."
       else
         ToDo.print_list(list_name, tasks)
@@ -121,6 +122,10 @@ class ToDoController
 
   def self.get_ordered_tasks(list_name)
     Task.where(list_id: List.find_by(name: list_name)).map { |task| task }
+  end
+
+  def self.list_exists?(list_name)
+    List.exists?(name: list_name)
   end
 end
 
