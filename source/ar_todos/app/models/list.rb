@@ -35,5 +35,9 @@ class List < ActiveRecord::Base
     List.all.to_a.map(&:name)
   end
 
+  def self.change_list_name(list_id, new_name)
+    List.find(list_id).update_attribute(:name, new_name)
+  end
+
 end
 
