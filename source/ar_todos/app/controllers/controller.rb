@@ -30,4 +30,8 @@ class Controller
 		TerminalView.show_lists
 	end
 
+	def change_list_name(list_id, new_name)
+		List.change_list_name(list_id, new_name)
+	end
+
 end

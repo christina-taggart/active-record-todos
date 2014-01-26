@@ -25,6 +25,14 @@ class List < ActiveRecord::Base
   	tasks[task_position.to_i-1].update_attribute(:done, "1")
   end
 
+  def self.sort_tasks_by_creation_date(list_id)
+    List.find(list_id).tasks.sort_by(&:created_at)
+  end
+
+  def self.find_completed_tasks(list_id)
+    List.find(list_id).tasks.where("done = ?", "1")
+  end
+
   # list only
 
   def self.add_list(name)

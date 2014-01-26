@@ -4,6 +4,8 @@ class CreateTask < ActiveRecord::Migration
       t.belongs_to :list
       t.string :done
       t.string :description
+      t.string :tag
+      t.date :completion_date
       t.timestamps
     end
   end
