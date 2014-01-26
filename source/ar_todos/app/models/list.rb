@@ -28,11 +28,15 @@ class List < ActiveRecord::Base
   end
 
   def self.sort_tasks_by_creation_date(list_id)
-    List.find(list_id).tasks.sort_by(&:created_at)
+    List.find_outstanding_tasks(list_id).sort_by(&:created_at)
   end
 
   def self.sort_tasks_by_completion_date(list_id)
     List.find_completed_tasks(list_id).sort_by(&:completion_date)
+  end
+
+  def self.find_outstanding_tasks(list_id)
+    List.find(list_id).tasks.where("done = ?", "0")
   end
 
   def self.find_completed_tasks(list_id)

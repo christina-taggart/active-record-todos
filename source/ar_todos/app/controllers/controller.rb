@@ -34,7 +34,12 @@ class Controller
 		List.change_list_name(list_id, new_name)
 	end
 
-	def sort_by_completion_date(list_id)
+	def outstanding_tasks(list_id)
+		tasks = List.sort_tasks_by_creation_date(list_id)
+		TerminalView.display_tasks(tasks)
+	end
+
+	def completed_tasks(list_id)
 		tasks = List.sort_tasks_by_completion_date(list_id)
 		TerminalView.display_tasks(tasks)
 	end
