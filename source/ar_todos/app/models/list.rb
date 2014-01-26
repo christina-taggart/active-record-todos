@@ -43,6 +43,16 @@ class List < ActiveRecord::Base
     List.find(list_id).tasks.where("done = ?", "1")
   end
 
+  def self.tag(list_id, task_position, tag)
+    tasks = List.tasks_on_this_list(list_id)
+    desired_task = tasks[task_position.to_i-1]
+    desired_task.update_attribute(:tag, tag)
+  end
+
+  def self.sort_by_tag(list_id, tag)
+    List.find_outstanding_tasks(list_id).where("tag = ?", tag).sort_by(&:created_at)
+  end
+
   # list only
 
   def self.add_list(name)

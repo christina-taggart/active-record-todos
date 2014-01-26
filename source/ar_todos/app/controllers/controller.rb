@@ -44,4 +44,13 @@ class Controller
 		TerminalView.display_tasks(tasks)
 	end
 
+	def tag(list_id, task_position, tag)
+		List.tag(list_id, task_position, tag)
+	end
+
+	def sort_by_tag(list_id, tag)
+		tasks = List.sort_by_tag(list_id, tag)
+		TerminalView.display_tasks(tasks)
+	end
+
 end
