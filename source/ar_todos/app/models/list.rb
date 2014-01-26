@@ -7,11 +7,11 @@ class List < ActiveRecord::Base
     List.tasks_on_this_list(id).map(&:description)
   end
 
-  def self.add_task(list_id, task_description) # adds a task to a specified list
+  def self.add_task!(list_id, task_description) # adds a task to a specified list
   	Task.create(description: task_description, done: "0", list_id: list_id)
   end
 
-  def self.delete_task(list_id, task_position) # deletes a task from a specified list
+  def self.delete_task!(list_id, task_position) # deletes a task from a specified list
   	tasks = List.tasks_on_this_list(list_id)
   	tasks[task_position.to_i-1].destroy
   end
@@ -20,13 +20,19 @@ class List < ActiveRecord::Base
   	List.find(list_id).tasks.to_a
   end
 
-  def self.complete_task(list_id, task_position) # marks a specified task on a specified list as complete (i.e. "1")
+  def self.complete_task!(list_id, task_position) # marks a specified task on a specified list as complete (i.e. "1")
   	tasks = List.tasks_on_this_list(list_id)
-  	tasks[task_position.to_i-1].update_attribute(:done, "1")
+  	desired_task = tasks[task_position.to_i-1]
+    desired_task.update_attribute(:done, "1")
+    desired_task.update_attribute(:completion_date, DateTime.now)
   end
 
   def self.sort_tasks_by_creation_date(list_id)
     List.find(list_id).tasks.sort_by(&:created_at)
+  end
+
+  def self.sort_tasks_by_completion_date(list_id)
+    List.find_completed_tasks(list_id).sort_by(&:completion_date)
   end
 
   def self.find_completed_tasks(list_id)
@@ -43,7 +49,7 @@ class List < ActiveRecord::Base
     List.all.to_a.map(&:name)
   end
 
-  def self.change_list_name(list_id, new_name)
+  def self.change_list_name!(list_id, new_name)
     List.find(list_id).update_attribute(:name, new_name)
   end
 

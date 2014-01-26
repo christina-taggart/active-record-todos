@@ -8,7 +8,7 @@ class TerminalView # right now this is kinda controller and view
 	### stuff for tasks
 
 	def self.list(id)
-		List.get_tasks_for_list(id).each_with_index do |task, index| 
+		List.get_tasks_for_list(id).each_with_index do |task, index|
       puts "#{index+1}. #{task.capitalize}"
     end
 	end
@@ -17,13 +17,20 @@ class TerminalView # right now this is kinda controller and view
     puts "You just deleted '#{deleted_item[:description]}'' from your list."
   end
 
+  def self.display_tasks(tasks)
+    tasks.each_with_index do |task, index|
+      puts "#{index+1}. #{task[:description]}"
+    end
+  end
+
   ### stuff for lists
 
 	def self.show_lists
     puts "Here are all of your lists:"
-    List.retrieve_list_names.each_with_index do |name, index| 
+    List.retrieve_list_names.each_with_index do |name, index|
       puts "#{index+1}. #{name.capitalize}"
     end
   end
+
 
 end

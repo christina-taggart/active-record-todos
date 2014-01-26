@@ -5,7 +5,7 @@ class CreateTask < ActiveRecord::Migration
       t.string :done
       t.string :description
       t.string :tag
-      t.date :completion_date
+      t.datetime :completion_date
       t.timestamps
     end
   end
